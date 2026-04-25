@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertas Relâmpago — Promoções por nicho</title>
+    <meta name="description" content="Pegue a oferta antes que ela suma! Escolha seu nicho preferido e receba ofertas personalizadas no WhatsApp e Telegram.">
+
+    <meta property="og:title" content="Ofertas Relâmpago">
+    <meta property="og:description" content="Pegue a oferta antes que ela suma!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://relampagoofertas.com.br/">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='22'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Relâmpago">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        a, button, .niche-card { touch-action: manipulation; }
+
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: #141414;
+            --yellow: #FFD200;
+            --yellow-dark: #c8a500;
+            --text: #ffffff;
+            --text-dim: #9a9a9a;
+            --whatsapp: #25D366;
+            --whatsapp-hover: #1ea854;
+            --telegram: #229ED9;
+            --telegram-hover: #1a82b3;
+        }
+
+        html, body { min-height: 100%; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            /* Padding inferior calcula barra fixa + safe-area do iPhone */
+            padding: 32px 16px calc(96px + env(safe-area-inset-bottom));
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(255, 210, 0, 0.08), transparent 40%),
+                radial-gradient(circle at 80% 90%, rgba(255, 210, 0, 0.06), transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logo {
+            margin: 0 auto 24px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .logo-bolt {
+            width: 70px;
+            height: auto;
+            margin: 0 auto 6px;
+            display: block;
+            filter:
+                drop-shadow(0 0 4px #FFD200)
+                drop-shadow(0 0 12px #FFD200)
+                drop-shadow(0 0 24px rgba(255, 210, 0, 0.5));
+            animation: glow-bolt 2.4s ease-in-out infinite;
+        }
+
+        @keyframes glow-bolt {
+            0%, 100% { filter: drop-shadow(0 0 4px #FFD200) drop-shadow(0 0 12px #FFD200) drop-shadow(0 0 24px rgba(255, 210, 0, 0.4)); }
+            50% { filter: drop-shadow(0 0 6px #FFD200) drop-shadow(0 0 18px #FFD200) drop-shadow(0 0 36px rgba(255, 210, 0, 0.7)); }
+        }
+
+        .logo-text {
+            font-family: 'Anton', 'Impact', 'Arial Black', sans-serif;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        .logo-ofertas {
+            display: block;
+            font-size: clamp(44px, 12vw, 64px);
+            color: #FFF8DC;
+            -webkit-text-stroke: 1.5px #FFD200;
+            text-shadow:
+                0 0 3px #FFD200,
+                0 0 8px #FFB800,
+                0 0 18px rgba(255, 184, 0, 0.85),
+                0 0 36px rgba(255, 184, 0, 0.5);
+        }
+
+        .logo-relampago {
+            display: block;
+            font-size: clamp(26px, 7vw, 38px);
+            color: #E8FFF0;
+            -webkit-text-stroke: 1px #4ade80;
+            letter-spacing: 4px;
+            text-shadow:
+                0 0 3px #4ade80,
+                0 0 8px #22c55e,
+                0 0 18px rgba(34, 197, 94, 0.85),
+                0 0 36px rgba(34, 197, 94, 0.5);
+            margin-top: 12px;
+        }
+
+        h1 {
+            font-size: clamp(24px, 6vw, 32px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        h1 .accent {
+            color: var(--yellow);
+            display: block;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 210, 0, 0.1);
+            color: var(--yellow);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 999px;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #4ade80;
+            animation: blink 1.4s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 999px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+            color: #ffffff;
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-whatsapp { background: var(--whatsapp); box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35); }
+        .btn-whatsapp:hover { background: var(--whatsapp-hover); box-shadow: 0 12px 32px rgba(37, 211, 102, 0.45); }
+        .btn-telegram { background: var(--telegram); box-shadow: 0 8px 24px rgba(34, 158, 217, 0.35); }
+        .btn-telegram:hover { background: var(--telegram-hover); box-shadow: 0 12px 32px rgba(34, 158, 217, 0.45); }
+        .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        /* Divisor */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 40px 0 24px;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 210, 0, 0.3), transparent);
+        }
+
+        .section-divider span {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--yellow);
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: clamp(20px, 5vw, 26px);
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+        }
+
+        /* Grid de nichos */
+        .niches-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 520px) {
+            .niches-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* Desktop: 6 nichos em linha única, expande além do container de 480px */
+        @media (min-width: 880px) {
+            .niches-grid {
+                grid-template-columns: repeat(6, 1fr);
+                width: min(960px, calc(100vw - 32px));
+                margin-left: 50%;
+                transform: translateX(-50%);
+                position: relative;
+            }
+            .niche-card { min-height: 160px; padding: 16px 8px 12px; }
+            .niche-emoji { font-size: 32px; }
+            .niche-name { font-size: 13px; }
+        }
+
+        .niche-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 210, 0, 0.12);
+            border-radius: 18px;
+            padding: 18px 12px 14px;
+            text-align: center;
+            transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 170px;
+            will-change: transform;
+        }
+
+        .niche-card:hover {
+            border-color: rgba(255, 210, 0, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 210, 0, 0.08);
+        }
+
+        .niche-card:active {
+            transform: scale(0.96);
+            border-color: rgba(255, 210, 0, 0.55);
+            box-shadow: 0 0 0 3px rgba(255, 210, 0, 0.15), 0 4px 16px rgba(255, 210, 0, 0.12);
+        }
+
+        .niche-btn {
+            transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .niche-btn:active { transform: scale(0.9); }
+
+        .niche-emoji {
+            font-size: 36px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .niche-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .niche-buttons {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .niche-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 4px;
+            border-radius: 999px;
+            color: #fff;
+            text-decoration: none;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+
+        .niche-btn:hover { opacity: 0.85; }
+        .niche-btn:active { transform: scale(0.95); }
+
+        .niche-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .niche-btn-wpp { background: var(--whatsapp); }
+        .niche-btn-tg { background: var(--telegram); }
+
+        /* Botões "em breve": cor da marca preservada, opacidade leve, sem clique */
+        .niche-btn-soon {
+            opacity: 0.55;
+            cursor: default;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .footer {
+            margin-top: 36px;
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.6;
+            max-width: 340px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Botões principais menores na v2 (libera espaço pros nichos) */
+        .main-cta { margin-bottom: 0; }
+
+        /* Sticky bottom CTA bar (sempre visível no scroll) */
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1px solid rgba(255, 210, 0, 0.18);
+            z-index: 50;
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .sticky-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 48px;
+            border-radius: 999px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
+        }
+
+        .sticky-btn:active { transform: scale(0.96); }
+        .sticky-btn svg { width: 18px; height: 18px; }
+
+        .sticky-btn-wpp { background: var(--whatsapp); box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); }
+        .sticky-btn-tg  { background: var(--telegram); box-shadow: 0 4px 14px rgba(34, 158, 217, 0.35); }
+
+        /* Desktop: esconde sticky bar (CTAs principais já estão sempre visíveis no topo) */
+        @media (min-width: 700px) {
+            .sticky-bar { display: none; }
+            body { padding-bottom: 48px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="logo" role="img" aria-label="Ofertas Relâmpago">
+            <svg class="logo-bolt" viewBox="0 0 80 120" fill="none" stroke="#FFD200" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M48 4 L14 70 L34 70 L24 116 L66 46 L46 46 L56 4 Z"/>
+            </svg>
+            <div class="logo-text">
+                <span class="logo-ofertas">OFERTAS</span>
+                <span class="logo-relampago">RELÂMPAGO</span>
+            </div>
+        </div>
+
+        <h1>
+            PEGUE A OFERTA
+            <span class="accent">ANTES QUE ELA SUMA!</span>
+        </h1>
+
+        <p class="subtitle">As melhores promoções da internet, em tempo real.</p>
+
+        <div class="stats">
+            <span class="stats-dot"></span>
+            100% GRATUITO
+        </div>
+
+        <a class="btn btn-whatsapp main-cta" href="https://chat.whatsapp.com/JEov1SpV2kMFkV4C6nbL8Z" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Grupo VIP no WhatsApp
+        </a>
+
+        <a class="btn btn-telegram" href="https://t.me/ofertasrelampagoofc" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Canal principal no Telegram
+        </a>
+
+        <div class="section-divider"><span>OU</span></div>
+
+        <h2 class="section-title">Escolha seu nicho preferido</h2>
+        <p class="section-subtitle">Receba só as ofertas que te interessam.</p>
+
+        <div class="niches-grid">
+            <!-- Beleza -->
+            <div class="niche-card">
+                <div class="niche-emoji">💄</div>
+                <div class="niche-name">Beleza</div>
+                <div class="niche-buttons">
+                    <a class="niche-btn niche-btn-wpp" href="https://chat.whatsapp.com/GKpOvNYbHniLq2M10G938R" target="_blank" rel="noopener" aria-label="WhatsApp Beleza">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </a>
+                    <a class="niche-btn niche-btn-tg" href="https://t.me/ofertasbelezabr" target="_blank" rel="noopener" aria-label="Telegram Beleza">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Games -->
+            <div class="niche-card">
+                <div class="niche-emoji">🎮</div>
+                <div class="niche-name">Games</div>
+                <div class="niche-buttons">
+                    <a class="niche-btn niche-btn-wpp" href="https://chat.whatsapp.com/JMuyYAs8zPXAELw9TOlIpR" target="_blank" rel="noopener" aria-label="WhatsApp Games">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </a>
+                    <a class="niche-btn niche-btn-tg" href="https://t.me/ofertasdogame" target="_blank" rel="noopener" aria-label="Telegram Games">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mercado -->
+            <div class="niche-card">
+                <div class="niche-emoji">🛒</div>
+                <div class="niche-name">Mercado</div>
+                <div class="niche-buttons">
+                    <a class="niche-btn niche-btn-wpp" href="https://chat.whatsapp.com/BTZMgEwEVSj3SBhcc7AKEe" target="_blank" rel="noopener" aria-label="WhatsApp Mercado">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </a>
+                    <a class="niche-btn niche-btn-tg" href="https://t.me/ofertademercado" target="_blank" rel="noopener" aria-label="Telegram Mercado">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Pet -->
+            <div class="niche-card">
+                <div class="niche-emoji">🐾</div>
+                <div class="niche-name">Pet</div>
+                <div class="niche-buttons">
+                    <a class="niche-btn niche-btn-wpp" href="https://chat.whatsapp.com/JxpZbikCmbvBwiEkcpatVS" target="_blank" rel="noopener" aria-label="WhatsApp Pet">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </a>
+                    <a class="niche-btn niche-btn-tg" href="https://t.me/ofertasdopet" target="_blank" rel="noopener" aria-label="Telegram Pet">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Suplementos -->
+            <div class="niche-card">
+                <div class="niche-emoji">💪</div>
+                <div class="niche-name">Suplementos</div>
+                <div class="niche-buttons">
+                    <a class="niche-btn niche-btn-wpp" href="https://chat.whatsapp.com/J7HFIdLooSP4gowrFs7rfE" target="_blank" rel="noopener" aria-label="WhatsApp Suplementos">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </a>
+                    <a class="niche-btn niche-btn-tg" href="https://t.me/ofertasuplementos" target="_blank" rel="noopener" aria-label="Telegram Suplementos">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tech -->
+            <div class="niche-card">
+                <div class="niche-emoji">💻</div>
+                <div class="niche-name">Tech</div>
+                <div class="niche-buttons">
+                    <a class="niche-btn niche-btn-wpp" href="https://chat.whatsapp.com/Hscs3fFyWbl8LRdPLyf5PV" target="_blank" rel="noopener" aria-label="WhatsApp Tech">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    </a>
+                    <a class="niche-btn niche-btn-tg" href="https://t.me/ofertastechbrasil" target="_blank" rel="noopener" aria-label="Telegram Tech">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="footer">
+            ⚡ Entre nos grupos e canais e receba as melhores promoções todo dia, em tempo real.
+        </p>
+    </main>
+
+    <nav class="sticky-bar" aria-label="Acesso rápido">
+        <a class="sticky-btn sticky-btn-wpp" href="https://chat.whatsapp.com/JEov1SpV2kMFkV4C6nbL8Z" target="_blank" rel="noopener" aria-label="WhatsApp principal">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+        </a>
+        <a class="sticky-btn sticky-btn-tg" href="https://t.me/ofertasrelampagoofc" target="_blank" rel="noopener" aria-label="Telegram principal">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.231-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Telegram
+        </a>
+    </nav>
+</body>
+</html>
